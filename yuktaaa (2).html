@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>yuktaaa's board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Caveat:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --board: #1c140f;
+    --board2: #241a13;
+    --purple: #7c3aed;
+    --purple-deep: #3d1a63;
+    --lilac: #d8b4fe;
+    --tape: #f2b705;
+    --tape2: #e8815a;
+    --pin: #e0577b;
+    --ink: #f3ead9;
+    --ink-dim: #b8a998;
+    --paper: #ece2cf;
+    --paper-dark: #1a130e;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html,body{ margin:0; padding:0; }
+
+  body{
+    font-family: 'Work Sans', sans-serif;
+    color: var(--ink);
+    background-color: var(--board);
+    background-image:
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.12) 0px, rgba(0,0,0,0.12) 1px, transparent 1px, transparent 34px),
+      repeating-linear-gradient(90deg, rgba(0,0,0,0.08) 0px, rgba(0,0,0,0.08) 1px, transparent 1px, transparent 34px),
+      radial-gradient(ellipse 90% 60% at 20% -10%, rgba(124,58,237,0.22), transparent 55%),
+      radial-gradient(ellipse 70% 50% at 100% 30%, rgba(224,87,123,0.12), transparent 55%);
+    min-height: 100vh;
+  }
+
+  .pin{
+    width: 13px; height: 13px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #ff9db3, var(--pin) 60%, #8f1f3d 100%);
+    box-shadow: 0 3px 4px rgba(0,0,0,0.5);
+    position: absolute;
+    left: 50%;
+    top: -7px;
+    transform: translateX(-50%);
+    z-index: 3;
+  }
+  .pin.gold{ background: radial-gradient(circle at 35% 30%, #ffe9a8, var(--tape) 60%, #a5730a 100%); }
+  .pin.lilac{ background: radial-gradient(circle at 35% 30%, #f0e2ff, var(--lilac) 60%, #6b21a8 100%); }
+
+  .tape{
+    position: absolute;
+    width: 84px; height: 26px;
+    background: linear-gradient(100deg, rgba(242,183,5,0.75), rgba(242,183,5,0.55));
+    box-shadow: 0 2px 3px rgba(0,0,0,0.25);
+    opacity: 0.9;
+    z-index: 3;
+  }
+  .tape::after{
+    content:'';
+    position:absolute; inset:0;
+    background: repeating-linear-gradient(115deg, rgba(255,255,255,0.15) 0 2px, transparent 2px 6px);
+  }
+  .tape.rose{ background: linear-gradient(100deg, rgba(224,87,123,0.7), rgba(224,87,123,0.5)); }
+  .tape.violet{ background: linear-gradient(100deg, rgba(216,180,254,0.55), rgba(216,180,254,0.4)); }
+
+  /* ============ HEADER ============ */
+
+  header{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 70px 28px 10px;
+    text-align: left;
+  }
+
+  .kicker{
+    font-family: 'Caveat', cursive;
+    font-size: 26px;
+    color: var(--lilac);
+    transform: rotate(-3deg);
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+
+  h1{
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(46px, 9vw, 96px);
+    margin: 0;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 0.92;
+  }
+
+  .underline-wrap{ position: relative; display: inline-block; }
+  .underline-wrap svg{
+    position: absolute;
+    left: -2%;
+    bottom: -14px;
+    width: 104%;
+    height: 22px;
+  }
+
+  header p.deck{
+    max-width: 46ch;
+    font-size: 16.5px;
+    color: var(--ink-dim);
+    margin: 30px 0 0;
+    line-height: 1.55;
+  }
+
+  /* ============ BOARD LAYOUT ============ */
+
+  .board{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 46px 28px 90px;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 26px 20px;
+  }
+
+  .note{
+    position: relative;
+    background: var(--paper);
+    color: var(--paper-dark);
+    padding: 20px 20px 18px;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.35);
+  }
+
+  .note.torn{
+    clip-path: polygon(
+      0% 3%, 6% 0%, 14% 2%, 22% 0%, 31% 3%, 40% 0%, 49% 2%, 58% 0%, 67% 3%, 76% 0%, 85% 2%, 94% 0%, 100% 3%,
+      100% 97%, 92% 100%, 83% 98%, 74% 100%, 65% 97%, 56% 100%, 47% 98%, 38% 100%, 29% 97%, 20% 100%, 11% 98%, 0% 100%
+    );
+    padding-bottom: 26px;
+  }
+
+  .note .eyebrow{
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: #6b21a8;
+    margin-bottom: 6px;
+  }
+
+  .note .big{
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 1.15;
+  }
+
+  .note .small{
+    font-family: 'Work Sans', sans-serif;
+    font-size: 14px;
+    color: #5a4c3d;
+    margin-top: 4px;
+  }
+
+  .note .scribble{
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    color: #7c3aed;
+    margin-top: 6px;
+  }
+
+  /* individual placements */
+  .n1{ grid-column: 1 / 6; transform: rotate(-2.2deg); margin-top: 6px; }
+  .n2{ grid-column: 6 / 9; transform: rotate(2.5deg); margin-top: 34px; }
+  .n3{ grid-column: 9 / 13; transform: rotate(-1.4deg); }
+  .n4{ grid-column: 1 / 5; transform: rotate(1.8deg); }
+  .n5{ grid-column: 5 / 9; transform: rotate(-2.6deg); margin-top: 14px; }
+  .n6{ grid-column: 9 / 13; transform: rotate(2.1deg); margin-top: -6px; }
+  .n7{ grid-column: 1 / 7; transform: rotate(-1.1deg); }
+  .n8{ grid-column: 7 / 13; transform: rotate(1.6deg); margin-top: 20px; }
+  .n9{ grid-column: 1 / 4; transform: rotate(2.8deg); }
+  .n10{ grid-column: 4 / 9; transform: rotate(-2deg); margin-top: 8px; }
+  .n11{ grid-column: 9 / 13; transform: rotate(-1.6deg); margin-top: 4px; }
+  .n12{ grid-column: 1 / 13; transform: rotate(0.6deg); }
+
+  @media (max-width: 720px){
+    .board{ grid-template-columns: 1fr; gap: 40px 0; padding-top: 30px; }
+    .note{ grid-column: 1 / -1 !important; margin-top: 0 !important; }
+  }
+
+  /* swatch strip */
+  .swatch-strip{ display:flex; gap: 8px; margin-top: 12px; }
+  .swatch-strip div{ flex:1; height: 40px; }
+
+  /* record graphic for kanye tribute */
+  .record-card{ background: var(--paper-dark); color: var(--ink); }
+  .record{
+    width: 92px; height: 92px;
+    border-radius: 50%;
+    margin: 4px auto 10px;
+    background:
+      radial-gradient(circle at center, var(--paper-dark) 0 8px, transparent 8.5px),
+      repeating-radial-gradient(circle at center, #2a2a2a 0 2px, #111 2px 4px);
+    border: 3px solid #0a0a0a;
+    position: relative;
+  }
+  .record::after{
+    content:'';
+    position:absolute; inset: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), var(--pin));
+  }
+
+  /* lucky numbers */
+  .num-row{ display:flex; gap: 14px; margin-top: 8px; }
+  .num-circle{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    display:flex; align-items:center; justify-content:center;
+    background: var(--purple-deep);
+    color: var(--lilac);
+    border: 2px solid var(--purple);
+  }
+
+  /* moodboard palette block */
+  .palette-card{ background: var(--paper-dark); color: var(--ink); }
+  .palette-grid{
+    display:grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    margin-top: 12px;
+  }
+  .palette-grid div{ height: 46px; }
+  .brush{
+    position:absolute;
+    right: 14px; bottom: 10px;
+    font-size: 22px;
+    opacity: 0.6;
+  }
+
+  /* ============ FOOTER ============ */
+
+  footer{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 10px 28px 70px;
+    text-align: right;
+  }
+
+  footer .note.sign{
+    display: inline-block;
+    text-align: left;
+    transform: rotate(-2deg);
+    max-width: 320px;
+  }
+
+  footer .sign .big{ font-size: 19px; }
+
+  footer .sign .scribble{ font-size: 22px; }
+
+</style>
+</head>
+<body>
+
+<header>
+  <h1>
+    <span class="underline-wrap">yuktaaa
+      <svg viewBox="0 0 300 20" preserveAspectRatio="none"><path d="M2 12 C 40 2, 80 18, 120 9 S 200 2, 240 11 S 280 15, 298 6" stroke="#e0577b" stroke-width="4" fill="none" stroke-linecap="round"/></svg>
+    </span>
+  </h1>
+  <p class="deck">hii yukta(my baby)</p>
+</header>
+
+<div class="board">
+
+  <div class="note torn n1" style="--r:1">
+    <div class="tape gold" style="top:-14px; left:20px; transform: rotate(-6deg);"></div>
+    <div class="eyebrow">colour story</div>
+    <div class="big">Black &amp; Purple</div>
+    <div class="swatch-strip">
+      <div style="background:#15100c"></div>
+      <div style="background:#3d1a63"></div>
+      <div style="background:#7c3aed"></div>
+      <div style="background:#d8b4fe"></div>
+    </div>
+  </div>
+
+  <div class="note n2">
+    <span class="pin"></span>
+    <div class="eyebrow">chocolate</div>
+    <div class="big">Caramel</div>
+    <div class="small">non-negotiable</div>
+  </div>
+
+  <div class="note torn n3">
+    <div class="tape rose" style="top:-14px; right:16px; transform: rotate(5deg);"></div>
+    <div class="eyebrow">food</div>
+    <div class="big">Biryani</div>
+    <div class="small">+ salmon sushi</div>
+  </div>
+
+  <div class="note n4">
+    <span class="pin gold"></span>
+    <div class="eyebrow">sweet tooth</div>
+    <div class="big">Belgian waffle</div>
+    <div class="small">Kiki &amp; Oreo cream, specifically</div>
+  </div>
+
+  <div class="note torn n5">
+    <div class="tape violet" style="top:-14px; left:30px; transform: rotate(-4deg);"></div>
+    <div class="eyebrow">snack drawer</div>
+    <div class="big">Puffcorn</div>
+    <div class="small">+ orange Lays</div>
+  </div>
+
+  <div class="note n6">
+    <span class="pin"></span>
+    <div class="eyebrow">flowers</div>
+    <div class="big">None, thanks</div>
+    <div class="small">just not her thing</div>
+  </div>
+
+  <div class="note torn n7">
+    <div class="tape gold" style="top:-14px; left:40%; transform: rotate(3deg);"></div>
+    <div class="eyebrow">the obsession</div>
+    <div class="big">Formula 1 — Mercedes</div>
+    <div class="small">driver: Lewis Hamilton</div>
+  </div>
+
+  <div class="note n8">
+    <span class="pin lilac"></span>
+    <div class="eyebrow">on the map</div>
+    <div class="big">NYC &amp; Monaco</div>
+    <div class="small">favourite city, favourite country</div>
+  </div>
+
+  <div class="note torn n9">
+    <div class="tape rose" style="top:-14px; left:14px; transform: rotate(-5deg);"></div>
+    <div class="eyebrow">lucky</div>
+    <div class="num-row">
+      <div class="num-circle">13</div>
+      <div class="num-circle">36</div>
+    </div>
+  </div>
+
+  <div class="note record-card n10">
+    <span class="pin"></span>
+    <div class="eyebrow" style="color:var(--lilac)">on repeat</div>
+    <div class="record"></div>
+    <div class="big" style="text-align:center">Kanye West</div>
+  </div>
+
+  <div class="note palette-card n11">
+    <span class="pin gold"></span>
+    <div class="eyebrow" style="color:var(--lilac)">for the sketchbook</div>
+    <div class="big" style="font-size:19px">a palette, since she's the artist</div>
+    <div class="palette-grid">
+      <div style="background:#15100c"></div>
+      <div style="background:#3d1a63"></div>
+      <div style="background:#7c3aed"></div>
+      <div style="background:#d8b4fe"></div>
+      <div style="background:#e0577b"></div>
+    </div>
+    <div class="brush">🖌️</div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="note sign">
+    <span class="pin"></span>
+    <div class="small">pinned up, framed, and signed —</div>
+    <div class="big">your fanboy,</div>
+    <div class="scribble">saurabh 🖤</div>
+  </div>
+</footer>
+
+</body>
+</html>
